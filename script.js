@@ -5,11 +5,11 @@ function setCookie(name, value) {
 
 function getCookie(name) {
   let cname = name + "=";
-  let decoded = decodeURIComponent(document.cookie);
-  let arr = decoded.split(';');
+  let cookies = document.cookie.split(";");
 
-  for (let i = 0; i < arr.length; i++) {
-    let c = arr[i].trim();
+  for (let i = 0; i < cookies.length; i++) {
+    let c = cookies[i].trim();
+
     if (c.indexOf(cname) === 0) {
       return c.substring(cname.length);
     }
@@ -18,7 +18,6 @@ function getCookie(name) {
 }
 
 window.onload = function () {
-
   let size = getCookie("fontsize");
   let color = getCookie("fontcolor");
 
@@ -31,17 +30,17 @@ window.onload = function () {
     document.documentElement.style.setProperty("--fontcolor", color);
     document.getElementById("fontcolor").value = color;
   }
-}
+};
 
-function savePreferences(e) {
-
+document.querySelector("form").addEventListener("submit", function (e) {
   e.preventDefault();
 
   let size = document.getElementById("fontsize").value + "px";
   let color = document.getElementById("fontcolor").value;
+
   document.documentElement.style.setProperty("--fontsize", size);
   document.documentElement.style.setProperty("--fontcolor", color);
 
   setCookie("fontsize", size);
   setCookie("fontcolor", color);
-}
+});
