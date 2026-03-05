@@ -1,53 +1,47 @@
 //your JS code here. If required.
-function setCookie(name, value, days) {
-  let expires = "";
-  if (days) {
-    let date = new Date();
-    date.setTime(date.getTime() + (days*24*60*60*1000));
-    expires = "; expires=" + date.toUTCString();
-  }
-  document.cookie = name + "=" + value + expires + "; path=/";
+function setCookie(name, value) {
+  document.cookie = name + "=" + value + "; path=/";
 }
+
 function getCookie(name) {
   let cname = name + "=";
-  let cookies = document.cookie.split(';');
+  let decoded = decodeURIComponent(document.cookie);
+  let arr = decoded.split(';');
 
-  for (let i = 0; i < cookies.length; i++) {
-    let c = cookies[i].trim();
-    if (c.indexOf(cname) == 0) {
-      return c.substring(cname.length, c.length);
+  for (let i = 0; i < arr.length; i++) {
+    let c = arr[i].trim();
+    if (c.indexOf(cname) === 0) {
+      return c.substring(cname.length);
     }
   }
   return "";
 }
 
-window.onload = function() {
-  let savedSize = getCookie("fontsize");
-  let savedColor = getCookie("fontcolor");
+window.onload = function () {
 
-  if (savedSize) {
-    document.documentElement.style.setProperty("--fontsize", savedSize);
-    document.getElementById("fontsize").value = parseInt(savedSize);
+  let size = getCookie("fontsize");
+  let color = getCookie("fontcolor");
+
+  if (size) {
+    document.documentElement.style.setProperty("--fontsize", size);
+    document.getElementById("fontsize").value = parseInt(size);
   }
 
-  if (savedColor) {
-    document.documentElement.style.setProperty("--fontcolor", savedColor);
-    document.getElementById("fontcolor").value = savedColor;
+  if (color) {
+    document.documentElement.style.setProperty("--fontcolor", color);
+    document.getElementById("fontcolor").value = color;
   }
-};
+}
 
+function savePreferences(e) {
 
-function savePreferences(event) {
-  event.preventDefault();
+  e.preventDefault();
 
   let size = document.getElementById("fontsize").value + "px";
   let color = document.getElementById("fontcolor").value;
-
-
   document.documentElement.style.setProperty("--fontsize", size);
   document.documentElement.style.setProperty("--fontcolor", color);
 
-
-  setCookie("fontsize", size, 30);
-  setCookie("fontcolor", color, 30);
+  setCookie("fontsize", size);
+  setCookie("fontcolor", color);
 }
